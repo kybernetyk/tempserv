@@ -41,5 +41,5 @@ namespace viz {
     protected:
         std::string value;
     };
-		
+
 }
