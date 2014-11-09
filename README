@@ -2,7 +2,7 @@ ZE TEMPERATURE SERVANT
 
 
 Dependencies:
-	- clang (or gcc) in some newer incarnation 
+	- clang (or gcc) in some newer incarnation (gcc-4.8+ needed on rpi to compile!)
 	- hidapi ( https://github.com/signal11/hidapi )
 	- sqlite3
 	- cmake
@@ -11,6 +11,7 @@ Build & Run:
 	1. download, build and install hidapi from https://github.com/signal11/hidapi
 	2. do cmake magic
 	3. create database with sqlite temp.db < schema.sql 
+	4. run with runloop.sh in a screen/tmux session for fake daemoning
 
 
 Copyright & License:
