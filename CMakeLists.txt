@@ -19,7 +19,7 @@ set(SOURCE_FILES
 include_directories(/usr/local/include/hidapi)
 add_executable(tempserv ${SOURCE_FILES})
 
-find_library(HIDAPI_LIB hidapi)
+find_library(HIDAPI_LIB NAMES hidapi hidapi-libusb)
 find_library(SQLITE3_LIB sqlite3)
 
 target_link_libraries (tempserv ${HIDAPI_LIB})

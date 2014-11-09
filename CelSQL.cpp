@@ -9,6 +9,8 @@
 #include "CelSQL.h"
 #include <string>
 #include <cstdio>
+#include <cstdlib>
+#include <string.h>
 
     namespace sql {
         
@@ -143,7 +145,7 @@
         
         void db::close() {
             if (m_database) {
-                sqlite3_close_v2(m_database);
+                sqlite3_close(m_database);
                 m_database = nullptr;
             }
         }
