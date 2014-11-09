@@ -3,8 +3,6 @@
 
 namespace sensor {
     Result<double> readTemp() {
-        return 1.5;
-
         hid_device *handle = hid_open(0x16c0, 0x0480, nullptr);
         if (!handle) {
             return jsz::Error(1, __PRETTY_FUNCTION__, "No sensor found!");
