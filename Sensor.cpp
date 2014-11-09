@@ -2,7 +2,7 @@
 #include <hidapi.h>
 
 namespace sensor {
-    viz::Result<double> readTemp() {
+    Result<double> readTemp() {
         return 1.5;
 
         hid_device *handle = hid_open(0x16c0, 0x0480, nullptr);

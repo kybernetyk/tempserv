@@ -2,6 +2,6 @@
 #include "Types.h"
 
 namespace sensor {
-    viz::Result<double> readTemp();
+    Result<double> readTemp();
 }
 

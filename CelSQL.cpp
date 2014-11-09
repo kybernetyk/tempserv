@@ -10,11 +10,10 @@
 #include <string>
 #include <cstdio>
 
-namespace viz {
     namespace sql {
         
 #pragma mark - row
-        viz::Result<int64_t> Row::getInteger(const int idx) const {
+        Result<int64_t> Row::getInteger(const int idx) const {
             if (m_columns.find(idx) == m_columns.end()) {
                 return jsz::Error(kSQLErrorUnknownColumnName, __PRETTY_FUNCTION__, "Could not retrieve value for column #" + std::to_string(idx));
             }
@@ -28,7 +27,7 @@ namespace viz {
             return m_columns.at(idx).intVal;
         }
         
-        viz::Result<int64_t> Row::getInteger(const std::string &col) const {
+        Result<int64_t> Row::getInteger(const std::string &col) const {
             if (m_columnIndexByName.find(col) == m_columnIndexByName.end()) {
                 return jsz::Error(kSQLErrorUnknownColumnName, __PRETTY_FUNCTION__, "Column index not found for " + col);
             }
@@ -37,7 +36,7 @@ namespace viz {
             return getInteger(idx);
         }
         
-        viz::Result<std::string> Row::getText(const int idx) const {
+        Result<std::string> Row::getText(const int idx) const {
             if (m_columns.find(idx) == m_columns.end()) {
                 return jsz::Error(kSQLErrorUnknownColumnName, __PRETTY_FUNCTION__, "Could not retrieve value for column #" + std::to_string(idx));
             }
@@ -50,7 +49,7 @@ namespace viz {
             return m_columns.at(idx).textVal;
         }
         
-        viz::Result<std::string> Row::getText(const std::string &col) const {
+        Result<std::string> Row::getText(const std::string &col) const {
             if (m_columnIndexByName.find(col) == m_columnIndexByName.end()) {
                 return jsz::Error(1, __PRETTY_FUNCTION__, "Column index not found for " + col);
             }
@@ -59,7 +58,7 @@ namespace viz {
             return getText(idx);
         }
         
-        viz::Result<double> Row::getDouble(const int idx) const {
+        Result<double> Row::getDouble(const int idx) const {
             if (m_columns.find(idx) == m_columns.end()) {
                 return jsz::Error(kSQLErrorUnknownColumnName, __PRETTY_FUNCTION__, "Could not retrieve value for column #" + std::to_string(idx));
             }
@@ -73,7 +72,7 @@ namespace viz {
             return m_columns.at(idx).doubleVal;
         }
         
-        viz::Result<double> Row::getDouble(const std::string &col) const {
+        Result<double> Row::getDouble(const std::string &col) const {
             if (m_columnIndexByName.find(col) == m_columnIndexByName.end()) {
                 return jsz::Error(kSQLErrorUnknownColumnName, __PRETTY_FUNCTION__, "Column index not found for " + col);
             }
@@ -82,14 +81,14 @@ namespace viz {
             return getDouble(idx);
         }
         
-        viz::Result<int> Row::getSQLType(const int idx) const {
+        Result<int> Row::getSQLType(const int idx) const {
             if (m_columns.find(idx) == m_columns.end()) {
                 return jsz::Error(kSQLErrorUnknownColumnName, __PRETTY_FUNCTION__, "Could not retrieve value for column #" + std::to_string(idx));
             }
             return m_columns.at(idx).SQLType;
         }
         
-        viz::Result<int> Row::getSQLType(const std::string &col) const {
+        Result<int> Row::getSQLType(const std::string &col) const {
             if (m_columnIndexByName.find(col) == m_columnIndexByName.end()) {
                 return jsz::Error(kSQLErrorUnknownColumnName, __PRETTY_FUNCTION__, "Column index not found for " + col);
             }
@@ -100,23 +99,23 @@ namespace viz {
         
         
 #pragma mark - result
-        const std::vector<Row> &Result::rows() const {
+        const std::vector<Row> &QueryResult::rows() const {
             return m_rows;
         };
         
-        int64_t Result::rowCount() const {
+        int64_t QueryResult::rowCount() const {
             return m_rows.size();
         }
         
-        int64_t Result::columnCount() const {
+        int64_t QueryResult::columnCount() const {
             return columns().size();
         }
         
-        const std::vector<std::string> &Result::columns() const {
+        const std::vector<std::string> &QueryResult::columns() const {
             return m_columns;
         }
         
-        viz::Result<std::string> Result::columnName(int index) const {
+        Result<std::string> QueryResult::columnName(int index) const {
             auto c = columns();
             if (index < 0 || index >= c.size()) {
                 return jsz::Error(1, __PRETTY_FUNCTION__, "Index out of bounds!");
@@ -124,7 +123,7 @@ namespace viz {
             return c.at(index);
         }
         
-        viz::Result<int> Result::columnIndex(std::string columnName) const {
+        Result<int> QueryResult::columnIndex(std::string columnName) const {
             if (m_columnIndexByName.find(columnName) == m_columnIndexByName.end()) {
                 return jsz::Error(1, __PRETTY_FUNCTION__, "Can not find column with name " + columnName);
             }
@@ -165,7 +164,7 @@ namespace viz {
                                            flags,
                                            nullptr);
             if (err_code != SQLITE_OK) {
-                return jsz::Error(err_code, __PRETTY_FUNCTION__, "SQLite Error: " + std::string(sqlite3_errmsg(m_database)));
+                return jsz::Error(err_code, __PRETTY_FUNCTION__, "SQLite Error (" + path.to_string() + ") : " + std::string(sqlite3_errmsg(m_database)));
             }
             
             
@@ -213,7 +212,7 @@ namespace viz {
             return true;
         }
         
-        viz::Result<Statement>db::prepare(const std::string &query) const {
+        Result<Statement>db::prepare(const std::string &query) const {
             assert(m_database);
             
             sqlite3_stmt *stmt;
@@ -292,7 +291,7 @@ namespace viz {
         status db::execute(const std::string &query) {
             assert(m_database);
 
-            viz::Result<Statement> stmt = prepare(query);
+            Result<Statement> stmt = prepare(query);
             if (!stmt) {
                 return stmt.error();
             }
@@ -315,7 +314,7 @@ namespace viz {
             return true;
         }
         
-        viz::Result<Result> db::query(const std::string &query) const {
+        Result<QueryResult> db::query(const std::string &query) const {
             assert(m_database);
 
             auto stmt = prepare(query);
@@ -323,7 +322,7 @@ namespace viz {
                 return stmt.error();
             }
             
-            Result res;
+            QueryResult res;
             for (int i = 0; i < sqlite3_column_count(stmt.value().stmt()); i++) {
                 res.m_columnIndexByName[sqlite3_column_name(stmt.value().stmt(), i)] = i;
                 res.m_columns.push_back(sqlite3_column_name(stmt.value().stmt(), i));
@@ -394,7 +393,7 @@ namespace viz {
             return res;
         }
         
-        viz::Result<int64_t> db::lastInsertedRowID() const {
+        Result<int64_t> db::lastInsertedRowID() const {
             assert(m_database);
 
             return sqlite3_last_insert_rowid(m_database);
@@ -408,4 +407,3 @@ namespace viz {
         }
         
     }
-}

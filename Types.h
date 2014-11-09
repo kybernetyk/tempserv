@@ -2,11 +2,8 @@
 #include <string>
 #include "optional.hpp"
 
-
-namespace viz {
     template <class T> using Result = jsz::optional<T>;
     typedef Result<bool> status;
-
 
     struct Path {
     public:
@@ -42,4 +39,3 @@ namespace viz {
         std::string value;
     };
 
-}

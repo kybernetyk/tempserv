@@ -12,7 +12,6 @@
 #include <map>
 #include "Types.h"
 
-namespace viz {
     namespace sql {
         const int kSQLErrorParameterBind = 73483;
         const int kSQLTypeError = 84932;
@@ -24,17 +23,17 @@ namespace viz {
             friend db;
             
         public:
-            viz::Result<int64_t> getInteger(const int idx) const;
-            viz::Result<int64_t> getInteger(const std::string &col) const;
+            Result<int64_t> getInteger(const int idx) const;
+            Result<int64_t> getInteger(const std::string &col) const;
             
-            viz::Result<std::string> getText(const int idx) const;
-            viz::Result<std::string> getText(const std::string &col) const;
+            Result<std::string> getText(const int idx) const;
+            Result<std::string> getText(const std::string &col) const;
             
-            viz::Result<double> getDouble(const int idx) const;
-            viz::Result<double> getDouble(const std::string &col) const;
+            Result<double> getDouble(const int idx) const;
+            Result<double> getDouble(const std::string &col) const;
             
-            viz::Result<int> getSQLType(const int idx) const;
-            viz::Result<int> getSQLType(const std::string &col) const;
+            Result<int> getSQLType(const int idx) const;
+            Result<int> getSQLType(const std::string &col) const;
             
             void print() const {
                 for (auto cn : m_columnIndexByName) {
@@ -70,7 +69,7 @@ namespace viz {
             std::map<int, AnyType> m_columns;
         };
         
-        class Result {
+        class QueryResult {
             friend db;
             
         public:
@@ -80,8 +79,8 @@ namespace viz {
             const std::vector<Row> &rows() const;
             const std::vector<std::string> &columns() const;
             
-            viz::Result<std::string> columnName(int index) const;
-            viz::Result<int> columnIndex(std::string columnName) const;
+            Result<std::string> columnName(int index) const;
+            Result<int> columnIndex(std::string columnName) const;
             
         private:
             std::map<std::string, int> m_columnIndexByName;
@@ -145,7 +144,7 @@ namespace viz {
             
             status importDump(const Path path);
             
-            viz::Result<Statement>prepare(const std::string &query) const;
+            Result<Statement>prepare(const std::string &query) const;
             status bindInteger(Statement &stmt, const std::string &paramName, const int64_t value);
             status bindText(Statement &stmt, const std::string &paramName, const std::string value);
             status bindDouble(Statement &stmt, const std::string &paramName, const double value);
@@ -154,14 +153,13 @@ namespace viz {
             status execute(Statement &stmt);
             status execute(const std::string &query);
             
-            viz::Result<int64_t> lastInsertedRowID() const;
+            Result<int64_t> lastInsertedRowID() const;
             
             //all rows will be loaded into memory - so be wise what you query for!
-            viz::Result<Result> query(const std::string &query) const;
+            Result<QueryResult> query(const std::string &query) const;
             
         private:
             sqlite3 *m_database;
         };
         
     }
-}
