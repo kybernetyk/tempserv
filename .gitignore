@@ -2,6 +2,4 @@ tempserv
 build/
 .idea
 .DS_Store
-database.db
-temp.db
 
