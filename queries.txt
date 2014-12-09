@@ -1,0 +1,5 @@
+Temperature for the last 2 days:
+
+	select datetime(timestamp, 'unixepoch') as Datum, temp as Temperatur from data where timestamp >= strftime('%s', date('now', '-1 day'));
+
+

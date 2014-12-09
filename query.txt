@@ -1,0 +1,2 @@
+SELECT datetime(timestamp, 'unixepoch', 'localtime') as date, temp from data;
+

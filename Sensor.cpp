@@ -9,10 +9,13 @@ namespace sensor {
         }
 
         unsigned char buf[65];
-        int num = hid_read(handle, buf, 64);
-        if (num < 0) {
-            return jsz::Error(2, __PRETTY_FUNCTION__, "Could not read from sensor!");
-        }
+	int num = 0;
+	for (int i = 0; i < 3; i++) {
+	        num = hid_read(handle, buf, 64);
+       		if (num < 0) {
+       	     		return jsz::Error(2, __PRETTY_FUNCTION__, "Could not read from sensor!");
+       	 	}
+	}
         if (num == 64) {
             short temp = *(short *) &buf[4]; //holy fuck!
             return double(temp);
