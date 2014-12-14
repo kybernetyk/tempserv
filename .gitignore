@@ -2,4 +2,6 @@ tempserv
 build/
 .idea
 .DS_Store
-
+jrk.db
+*.ps
+*.log
