@@ -344,8 +344,9 @@
                         val.isNull = (type == SQLITE_NULL);
                         const unsigned char *pchar;
                         
-                        //0 because let's fill the anytype with all info we can get
-                        if (1) {
+			//if false we will try to convert the row data into every supported type. if true only the assigned data type will be used
+			const bool typesafe_results = true;
+	                if (typesafe_results) {
                             switch (type) {
                                 case SQLITE_INTEGER:
                                     val.intVal = sqlite3_column_int64(stmt.value().stmt(), i);
