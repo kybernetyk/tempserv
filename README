@@ -1,5 +1,9 @@
 ZE TEMPERATURE SERVANT
+	A temperature logging thingy for the Raspberry Pi. Uses a DS18B20 temperature sensor (via a USB testing device) to take readings every 15 minutes and saves it into a sqlite3 database. Scripts to generate ugly plots with GNUplot are provided.
 
+	Scripts for temperature and time display via a "dream cheeky LED display" are also provided.
+
+	Though this is intended to run 24/7 on a Raspberry Pi it will compile and run on any Linux and on OS X.
 
 Dependencies:
 	- clang (or gcc) in some newer incarnation (gcc-4.8+ needed on rpi to compile!)
@@ -9,9 +13,10 @@ Dependencies:
 
 Build & Run:
 	1. download, build and install hidapi from https://github.com/signal11/hidapi
-	2. do cmake magic
+	2. do cmake magic (mkdir build; cd buil; cmake ..)
 	3. create database with sqlite temp.db < schema.sql 
 	4. run with runloop.sh in a screen/tmux session for fake daemoning
+	5. alternatively cronjob cjob.sh (every 15 minutes)
 
 
 Copyright & License:
